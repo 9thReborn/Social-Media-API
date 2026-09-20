@@ -31,6 +31,13 @@ async function listPosts(req, res) {
   res.status(200).json({ status: 'success', ...result });
 }
 
+// GET /api/posts/mine — requireAuth. Every post (draft + published) the
+// logged-in user owns, optionally narrowed with ?state=draft|published.
+async function listMyPosts(req, res) {
+  const result = await postService.listOwnPosts(req.user.id, req.query);
+  res.status(200).json({ status: 'success', ...result });
+}
+
 // GET /api/posts/:id — optionalAuth. Published posts are visible to anyone;
 // a draft is visible only to its own author (via req.user, if present).
 async function getPost(req, res) {
@@ -50,5 +57,6 @@ module.exports = {
   publishPost,
   deletePost,
   listPosts,
+  listMyPosts,
   getPost,
 };

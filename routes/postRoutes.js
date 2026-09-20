@@ -7,6 +7,11 @@ const router = express.Router();
 // Public routes first.
 router.get('/', postController.listPosts);
 
+
+// Registered BEFORE /:id — otherwise Express would match "mine" as the
+// value of :id and this route would never be reached.
+router.get('/mine', requireAuth, postController.listMyPosts);
+
 // NOTE: when the owner's-own-posts endpoint (e.g. GET /mine) is added, it
 // MUST be registered above this line — otherwise Express will match "mine"
 // as the value of :id here and it will never reach the /mine handler.
