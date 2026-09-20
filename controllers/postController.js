@@ -1,4 +1,5 @@
 const postService = require("../services/postService");
+const AppError = require("../utils/AppError");
 
 async function createPost(req, res) {
   const post = await postService.createPost(req.user._id, req.body);
@@ -24,4 +25,30 @@ async function deletePost(req, res) {
   res.status(204).send(); // 204 No Content — deletion succeeded, nothing to return
 }
 
-module.exports = { createPost, updatePost, publishPost, deletePost };
+// GET /api/posts — public, published-only, paginated/searchable/sortable.
+async function listPosts(req, res) {
+  const result = await postService.listPublishedPosts(req.query);
+  res.status(200).json({ status: 'success', ...result });
+}
+
+// GET /api/posts/:id — optionalAuth. Published posts are visible to anyone;
+// a draft is visible only to its own author (via req.user, if present).
+async function getPost(req, res) {
+  const requestingUserId = req.user ? req.user.id : null;
+  const post = await postService.getSinglePost(req.params.id, requestingUserId);
+ 
+  if (!post) {
+    throw new AppError('Post not found', 404);
+  }
+ 
+  res.status(200).json({ status: 'success', data: { post } });
+}
+
+module.exports = {
+  createPost,
+  updatePost,
+  publishPost,
+  deletePost,
+  listPosts,
+  getPost,
+};

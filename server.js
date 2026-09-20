@@ -4,6 +4,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const postRoutes = require("./routes/postRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json()); // parses JSON request bodies into req.body
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/posts/:postId/comments", commentRoutes);
 
 // Must be registered AFTER all routes — Express identifies "error-handling
 // middleware" purely by it having 4 parameters (err, req, res, next), and
