@@ -1,5 +1,6 @@
 const express = require("express");
 const postController = require("../controllers/postController");
+const likeController = require('../controllers/likeController');
 const { requireAuth, optionalAuth } = require("../middleware/auth");
 
 const router = express.Router();
@@ -24,7 +25,7 @@ router.patch("/:id", requireAuth, postController.updatePost);
 router.patch("/:id/publish", requireAuth, postController.publishPost);
 router.delete("/:id", requireAuth, postController.deletePost);
 
-// GET routes (public listing + single post + "my posts") come in the next
-// step — they need optionalAuth and pagination, which deserve their own pass.
+router.post("/:id/like", requireAuth, likeController.likePost);
+router.delete("/:id/like", requireAuth, likeController.unlikePost);
 
 module.exports = router;
