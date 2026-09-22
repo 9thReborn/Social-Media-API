@@ -6,7 +6,7 @@ async function createComment(req, res) {
     req.user._id,
     req.body.content,
   );
-  res.status(201).json({ success: true, data: comment });
+  res.status(201).json({ success: true, data: {comment} });
 }
 
 async function listComments(req, res) {

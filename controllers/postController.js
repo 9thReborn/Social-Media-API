@@ -3,7 +3,7 @@ const AppError = require("../utils/AppError");
 
 async function createPost(req, res) {
   const post = await postService.createPost(req.user._id, req.body);
-  res.status(201).json({ success: true, data: post });
+  res.status(201).json({ success: true, data: {post} });
 }
 
 async function updatePost(req, res) {
@@ -12,12 +12,12 @@ async function updatePost(req, res) {
     req.user._id,
     req.body,
   );
-  res.status(200).json({ success: true, data: post });
+  res.status(200).json({ success: true, data: {post} });
 }
 
 async function publishPost(req, res) {
   const post = await postService.publishPost(req.params.id, req.user._id);
-  res.status(200).json({ success: true, data: post });
+  res.status(200).json({ success: true, data: {post} });
 }
 
 async function deletePost(req, res) {
